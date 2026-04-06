@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
 import RoleSelectPage from './pages/auth/RoleSelectPage';
 import DashboardLayout from './layouts/DashboardLayout';
+import { ProtectedRoute } from './routes/ProtectedRoute';
 
 // Dashboards
 import FarmerDashboard from './pages/dashboard/FarmerDashboard';
@@ -29,27 +30,7 @@ import SystemSettings from './pages/dashboard/SystemSettings';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
 
-const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) => {
-  const { session, profile, isLoading } = useAuthStore();
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-brand-offwhite flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-brand-earth/20 border-t-brand-earth rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!session) {
-    return <Navigate to="/auth/role-select" replace />;
-  }
-
-  if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
-    return <Navigate to={`/dashboard/${profile.role}`} replace />;
-  }
-
-  return <>{children}</>;
-};
 
 function App() {
   const { initialize } = useAuthStore();
