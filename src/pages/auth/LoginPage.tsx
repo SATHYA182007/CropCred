@@ -77,11 +77,20 @@ const LoginPage = () => {
   });
 
   const fillDemo = () => {
-    setValue('email', config.demoEmail);
-    setValue('password', config.demoPassword);
-    toast.info('Demo credentials filled! Secure access granted.', {
+    const demoEmail = config.demoEmail;
+    const demoPassword = config.demoPassword;
+    
+    setValue('email', demoEmail);
+    setValue('password', demoPassword);
+    
+    toast.success('Demo credentials filled! Establishing secure protocol...', {
       icon: <Zap size={16} className="text-brand-gold" />
     });
+    
+    // Auto-submit after a brief delay for visual feedback
+    setTimeout(() => {
+      onSubmit({ email: demoEmail, password: demoPassword });
+    }, 800);
   };
 
   const onSubmit = async (data: FormData) => {

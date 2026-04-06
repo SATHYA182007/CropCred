@@ -55,13 +55,48 @@ export const useAuthStore = create<AuthState>()(
 
       signIn: async (email, password) => {
         set({ isLoading: true });
+
+        // Demo Login Bypass: If using demo credentials, simulate a successful login
+        const demoEmails = ['farmer@cropcred.ai', 'officer@cropcred.ai', 'admin@cropcred.ai'];
+        if (demoEmails.includes(email.toLowerCase()) && (password === 'Farmer@123' || password === 'Officer@123' || password === 'Admin@123')) {
+          const roleMap: Record<string, Role> = {
+            'farmer@cropcred.ai': 'farmer',
+            'officer@cropcred.ai': 'officer',
+            'admin@cropcred.ai': 'admin'
+          };
+          const role = roleMap[email.toLowerCase()];
+          const mockUser: User = {
+            id: 'demo-user-id-' + role,
+            email: email,
+            app_metadata: {},
+            user_metadata: { full_name: 'Demo ' + role.charAt(0).toUpperCase() + role.slice(1) },
+            aud: 'authenticated',
+            created_at: new Date().toISOString(),
+          };
+          const mockProfile: Profile = {
+            id: mockUser.id,
+            full_name: mockUser.user_metadata.full_name,
+            email: email,
+            role: role,
+          };
+
+          set({ 
+            user: mockUser, 
+            profile: mockProfile, 
+            isAuthenticated: true, 
+            isLoading: false 
+          });
+          
+          return { error: null, role };
+        }
+
         try {
           const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           
           if (error) {
             console.error('Auth Error:', error.message);
             set({ isLoading: false });
-            return { error: error.message, role: null };
+            return { error: 'Invalid login credentials. Please use demo credentials below.', role: null };
           }
 
           if (data.session && data.user) {
