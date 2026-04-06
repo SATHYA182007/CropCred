@@ -2,7 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Loader2 } from 'lucide-react';
 
-type Role = 'farmer' | 'banker' | 'admin';
+type Role = 'farmer' | 'officer' | 'admin';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

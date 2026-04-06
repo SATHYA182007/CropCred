@@ -14,7 +14,8 @@ import {
   Tractor,
   Droplets,
   Coins,
-  Cpu
+  Cpu,
+  ArrowUpRight
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
